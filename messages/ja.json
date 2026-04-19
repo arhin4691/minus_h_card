@@ -1,0 +1,179 @@
+{
+  "common": {
+    "appName": "Minus H Card",
+    "loading": "読み込み中...",
+    "save": "保存",
+    "cancel": "キャンセル",
+    "confirm": "確認",
+    "delete": "削除",
+    "edit": "編集",
+    "back": "戻る",
+    "search": "検索",
+    "filter": "フィルター",
+    "all": "すべて",
+    "error": "エラーが発生しました",
+    "success": "成功！"
+  },
+  "nav": {
+    "home": "ホーム",
+    "gallery": "カード図鑑",
+    "collection": "収蔵",
+    "explore": "ガチャ",
+    "friends": "友達",
+    "profile": "プロフィール",
+    "login": "ログイン",
+    "register": "新規登録",
+    "logout": "ログアウト",
+    "logoutConfirm": "本当にログアウトしますか？"
+  },
+  "auth": {
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "displayName": "表示名",
+    "loginTitle": "おかえりなさい ✿",
+    "registerTitle": "冒険に参加しよう ✿",
+    "loginButton": "ログイン",
+    "registerButton": "アカウント作成",
+    "noAccount": "アカウントをお持ちでないですか？",
+    "hasAccount": "すでにアカウントをお持ちですか？",
+    "emailRequired": "メールアドレスを入力してください",
+    "passwordRequired": "パスワードを入力してください",
+    "emailExists": "このメールアドレスは既に登録されています",
+    "keepMeLoggedIn": "ログイン状態を保つ"
+  },
+  "home": {
+    "hero": "愛のカードを発見しよう",
+    "subtitle": "宇宙で最もかわいいカードを集めて、交換して、アンロックしよう",
+    "startExploring": "探検を始める",
+    "viewCollection": "マイコレクション",
+    "featuredCards": "注目のカード"
+  },
+  "gallery": {
+    "title": "カードギャラリー",
+    "filterByRarity": "全部",
+    "filterByName": "名前で検索",
+    "noCards": "カードが見つかりません",
+    "generation": "世代",
+    "generationsPanel": {
+      "label": "{count}弾情報"
+    },
+    "generations": {
+      "all": "全世代",
+      "H1": "H1弾",
+      "H2": "H2弾"
+    },
+    "rarities": {
+      "common": "C",
+      "uncommon": "UC",
+      "rare": "R",
+      "superRare": "SR",
+      "epic": "SSR",
+      "legendary": "-H"
+    }
+  },
+  "collection": {
+    "title": "マイコレクション",
+    "empty": "コレクションは空です。探検を始めましょう！",
+    "milestone": "コレクションマイルストーン！",
+    "crystalUnlocked": "クリスタル化バージョンがアンロックされました！",
+    "progress": "進行状況",
+    "totalCards": "カード総数",
+    "uniqueCards": "ユニークカード",
+    "sort": {
+      "default": "デフォルト",
+      "name": "名前",
+      "rarity": "レアリティ",
+      "quantity": "枚数"
+    }
+  },
+  "explore": {
+    "title": "デイリー探検",
+    "subtitle": "Hエネルギーを見つけてレアリティをアップグレード",
+    "energy": "Hエネルギー",
+    "tap": "タップして探検！",
+    "found": "Hエネルギーを {amount} 見つけました！",
+    "cooldown": "次の探検は {time} 後に可能です",
+    "upgrade": "カードをアップグレード",
+    "upgradeSuccess": "カードのアップグレードに成功しました！",
+    "attemptsLeft": "残り回数：{count}",
+    "noAttemptsLeft": "明日また来てHエネルギーをゲットしよう！",
+    "draw": {
+      "title": "カードを引く",
+      "subtitle": "10 Hエネルギーを使ってランダムカードを引く",
+      "cost": "10 Hエネルギー",
+      "button": "カードを引く！",
+      "drawing": "引いています...",
+      "result": "引いたカード：",
+      "notEnoughEnergy": "カードを引くには10 Hエネルギーが必要です。もっと探検しよう！",
+      "drawAnother": "もう一枚引く",
+      "addedToCollection": "コレクションに追加しました！",
+      "seedCards": "カードデータベースを初期化",
+      "selectGeneration": "世代",
+      "allGenerations": "すべて"
+    },
+    "gacha": "ガチャ",
+    "pack": {
+      "cutting": "✂ 開封中...",
+      "opening": "✨ オープン中...",
+      "cardsDrawn": "{count}枚ゲット！",
+      "oneByOne": "1枚ずつ見る",
+      "viewAll": "全部見る",
+      "skipViewAll": "スキップ — 全カードを表示",
+      "viewSummary": "✨ まとめを見る",
+      "summaryTitle": "{count}枚",
+      "rarePlus": "レア以上 {count}枚",
+      "allCollected": "全部コレクション済み！"
+    }
+  },
+  "social": {
+    "title": "ソーシャル",
+    "gift": "カードを贈る",
+    "giftTo": "友達に送る",
+    "noFriends": "ギフトを送るには、まずフレンドコードで友達を追加してください",
+    "giftSuccess": "カードを贈りました！",
+    "badges": "ソーシャルバッジ",
+    "friendList": "フレンドリスト",
+    "bless": "友達を祝福",
+    "blessDescription": "重複カードを送って特別なバッジをアンロック"
+  },
+  "profile": {
+    "title": "マイプロフィール",
+    "editName": "表示名を編集",
+    "saveChanges": "変更を保存",
+    "stats": "統計",
+    "cardsCollected": "収集カード数",
+    "giftsGiven": "贈ったギフト数",
+    "badgesEarned": "獲得バッジ数",
+    "energyTotal": "獲得Hエネルギー総量",
+    "friendCode": "マイフレンドコード"
+  },
+  "friends": {
+    "title": "フレンド",
+    "subtitle": "繋がってコレクションをシェアしよう",
+    "myCode": "マイフレンドコード",
+    "addFriend": "フレンドを追加",
+    "addByCode": "フレンドコードを入力（例：1234-5678-9012）",
+    "send": "追加",
+    "adding": "追加中...",
+    "noFriends": "まだフレンドがいません。コードをシェアしましょう！",
+    "viewCards": "カードを見る",
+    "removeFriend": "削除",
+    "friendCards": "{name} のコレクション",
+    "back": "フレンド一覧に戻る",
+    "loginRequired": "フレンド機能を使うにはログインしてください。",
+    "alreadyFriends": "すでにフレンドです！",
+    "notFound": "そのコードのユーザーが見つかりません。",
+    "sendRequest": "フレンドリクエストを送る",
+    "acceptRequest": "フレンドリクエストを受け入れる",
+    "sending": "送信中..."
+  },
+  "notifications": {
+    "title": "通知",
+    "markAllRead": "すべて既読にする",
+    "empty": "まだ通知はありません",
+    "justNow": "たった今",
+    "minutesAgo": "{mins}分前",
+    "hoursAgo": "{hours}時間前",
+    "daysAgo": "{days}日前"
+  }
+}

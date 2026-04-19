@@ -1,0 +1,180 @@
+{
+  "common": {
+    "appName": "Minus H Card",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "search": "Search",
+    "filter": "Filter",
+    "all": "All",
+    "error": "Something went wrong",
+    "success": "Success!"
+  },
+  "nav": {
+    "home": "Home",
+    "gallery": "Gallery",
+    "collection": "Collection",
+    "explore": "Gacha",
+    "friends": "Friends",
+    "profile": "Profile",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "logoutConfirm": "Are you sure you want to log out?"
+  },
+  "auth": {
+    "email": "Email",
+    "password": "Password",
+    "displayName": "Display Name",
+    "loginTitle": "Welcome Back ✿",
+    "registerTitle": "Join the Adventure ✿",
+    "loginButton": "Sign In",
+    "registerButton": "Create Account",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "emailRequired": "Email is required",
+    "passwordRequired": "Password is required",
+    "emailExists": "This email is already registered",
+    "invalidCredentials": "Invalid email or password",
+    "keepMeLoggedIn": "Keep me logged in"
+  },
+  "home": {
+    "hero": "Discover Love Cards",
+    "subtitle": "Collect, trade, and unlock the cutest cards in the universe",
+    "startExploring": "Start Exploring",
+    "viewCollection": "My Collection",
+    "featuredCards": "Featured Cards"
+  },
+  "gallery": {
+    "title": "Card Gallery",
+    "filterByRarity": "All",
+    "filterByName": "Search by Name",
+    "noCards": "No cards found",
+    "generation": "Generation",
+    "generationsPanel": {
+      "label": "{count} Generations"
+    },
+    "generations": {
+      "all": "All Gen",
+      "H1": "Gen H1",
+      "H2": "Gen H2"
+    },
+    "rarities": {
+      "common": "C",
+      "uncommon": "UC",
+      "rare": "R",
+      "superRare": "SR",
+      "epic": "SSR",
+      "legendary": "-H"
+    }
+  },
+  "collection": {
+    "title": "My Collection",
+    "empty": "Your collection is empty. Start exploring!",
+    "milestone": "Collection Milestone!",
+    "crystalUnlocked": "Crystalized Version Unlocked!",
+    "progress": "Progress",
+    "totalCards": "Total Cards",
+    "uniqueCards": "Unique Cards",
+    "sort": {
+      "default": "Default",
+      "name": "Name",
+      "rarity": "Rarity",
+      "quantity": "Qty"
+    }
+  },
+  "explore": {
+    "title": "Gacha",
+    "subtitle": "Find H Energy to craft rarity upgrades",
+    "energy": "H Energy",
+    "tap": "Tap to explore!",
+    "found": "You found {amount} H Energy!",
+    "cooldown": "Next exploration available in {time}",
+    "upgrade": "Upgrade Card",
+    "upgradeSuccess": "Card upgraded successfully!",
+    "attemptsLeft": "Attempts Left: {count}",
+    "noAttemptsLeft": "Come back tomorrow for more H Energy!",
+    "draw": {
+      "title": "Draw a Card",
+      "subtitle": "Spend 10 H Energy to draw a random card",
+      "cost": "10 H Energy",
+      "button": "Draw Card!",
+      "drawing": "Drawing...",
+      "result": "You got:",
+      "notEnoughEnergy": "Need 10 H Energy to draw. Keep exploring!",
+      "drawAnother": "Draw Again",
+      "addedToCollection": "Added to your collection!",
+      "seedCards": "Seed Card Database",
+      "selectGeneration": "Generation",
+      "allGenerations": "All"
+    },
+    "gacha": "GaCha",
+    "pack": {
+      "cutting": "✂ Cut opening...",
+      "opening": "✨ Opening...",
+      "cardsDrawn": "{count} cards drawn!",
+      "oneByOne": "One by One",
+      "viewAll": "View All",
+      "skipViewAll": "Skip — view all cards",
+      "viewSummary": "✨ View Summary",
+      "summaryTitle": "{count} Cards",
+      "rarePlus": "{count} rare+",
+      "allCollected": "All collected!"
+    }
+  },
+  "social": {
+    "title": "Social",
+    "gift": "Gift Card",
+    "giftTo": "Send to friend",
+    "noFriends": "Add friends first using a friend code to send gifts",
+    "giftSuccess": "Card gifted successfully!",
+    "badges": "Social Badges",
+    "friendList": "Friends",
+    "bless": "Bless a Friend",
+    "blessDescription": "Send a duplicate card to unlock special badges"
+  },
+  "profile": {
+    "title": "My Profile",
+    "editName": "Edit Display Name",
+    "saveChanges": "Save Changes",
+    "stats": "Stats",
+    "cardsCollected": "Cards Collected",
+    "giftsGiven": "Gifts Given",
+    "badgesEarned": "Badges Earned",
+    "energyTotal": "Total H Energy Earned",
+    "friendCode": "My Friend Code"
+  },
+  "friends": {
+    "title": "Friends",
+    "subtitle": "Connect and share your collection",
+    "myCode": "My Friend Code",
+    "addFriend": "Add Friend",
+    "addByCode": "Enter friend code (e.g. 1234-5678-9012)",
+    "send": "Add",
+    "adding": "Adding...",
+    "noFriends": "No friends yet — share your code!",
+    "viewCards": "View Cards",
+    "removeFriend": "Remove",
+    "friendCards": "{name}'s Collection",
+    "back": "Back to Friends",
+    "loginRequired": "Please log in to use the Friends feature.",
+    "alreadyFriends": "Already friends!",
+    "notFound": "No user found with that code.",
+    "sendRequest": "Send Friend Request",
+    "acceptRequest": "Accept Friend Request",
+    "sending": "Sending..."
+  },
+  "notifications": {
+    "title": "Notifications",
+    "markAllRead": "Mark all read",
+    "empty": "No notifications yet",
+    "justNow": "just now",
+    "minutesAgo": "{mins}m ago",
+    "hoursAgo": "{hours}h ago",
+    "daysAgo": "{days}d ago"
+  }
+}

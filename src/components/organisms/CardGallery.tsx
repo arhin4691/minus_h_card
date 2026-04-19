@@ -1,0 +1,168 @@
+﻿'use client';
+
+import { useMemo, useState } from 'react';
+import { useTranslations } from 'next-intl';
+import { useCards, useCollection } from '@/hooks/useCards';
+import { useGenerations } from '@/hooks/useGenerations';
+import { useStore } from '@/stores/useStore';
+import CardContainer from '@/components/molecules/CardContainer';
+import CardDetailModal from '@/components/molecules/CardDetailModal';
+import GlassInput from '@/components/atoms/GlassInput';
+import GlassButton from '@/components/atoms/GlassButton';
+import GlassCard from '@/components/atoms/GlassCard';
+import type { CardRarity } from '@/models/Card';
+import { Search, Filter, Layers } from 'lucide-react';
+import { motion, LayoutGroup } from 'framer-motion';
+
+const RARITIES: (CardRarity | 'all')[] = [
+  'all', 'common', 'uncommon', 'rare', 'superRare', 'epic', 'legendary',
+];
+
+interface CardData {
+  _id: string;
+  name: string;
+  information: string;
+  rarity: CardRarity;
+  image: string;
+  generation: string;
+}
+
+export default function CardGallery() {
+  const t = useTranslations('gallery');
+  const {
+    activeRarityFilter, searchQuery, activeGenerationFilter,
+    setRarityFilter, setSearchQuery, setGenerationFilter,
+    userId, isLoggedIn,
+  } = useStore();
+  const { data: cards, isLoading } = useCards(activeRarityFilter, searchQuery, activeGenerationFilter);
+  const { data: collection } = useCollection(userId);
+  const { data: generations } = useGenerations();
+  const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
+
+  // Build a Set of owned card IDs for O(1) lookup
+  const ownedIds = useMemo(
+    () => new Set(collection?.map((c) => c.cardId._id) ?? []),
+    [collection],
+  );
+
+  return (
+    <LayoutGroup>
+      <div className="space-y-6">
+        {/* ── Filters ── */}
+        <GlassCard hover={false} className="p-5 space-y-3 sticky top-25 z-50">
+          {/* Search + rarity row */}
+          <div className="flex flex-col sm:flex-row gap-4 mb-3">
+            <div className="flex-1">
+              <div className="relative">
+                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <GlassInput
+                  placeholder={t('filterByName')}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-9"
+                />
+              </div>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Filter size={14} className="text-slate-400 mr-1" />
+              <div className="flex flex-wrap gap-1.5">
+                {RARITIES.map((r) => (
+                  <GlassButton
+                    key={r}
+                    size="sm"
+                    variant={activeRarityFilter === r ? 'primary' : 'ghost'}
+                    onClick={() => setRarityFilter(r)}
+                  >
+                    {r === 'all' ? t('filterByRarity') : t(`rarities.${r}`)}
+                  </GlassButton>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Generation filter row — dynamically loaded */}
+          {generations && generations.length > 0 && (
+            <div className="flex items-center gap-1.5">
+              <Layers size={14} className="text-slate-400 mr-1" />
+              <div className="flex flex-wrap gap-1.5">
+                <GlassButton
+                  size="sm"
+                  variant={activeGenerationFilter === 'all' ? 'primary' : 'ghost'}
+                  onClick={() => setGenerationFilter('all')}
+                >
+                  {t('generations.all')}
+                </GlassButton>
+                {generations.map((gen) => (
+                  <GlassButton
+                    key={gen._id}
+                    size="sm"
+                    variant={activeGenerationFilter === gen.code ? 'primary' : 'ghost'}
+                    onClick={() => setGenerationFilter(gen.code)}
+                  >
+                    <span>{gen.code}</span>
+                    {activeGenerationFilter === gen.code && (
+                      <span className="hidden sm:inline ml-1 opacity-75 text-[10px] font-normal">
+                        {gen.nameEn.split('—')[0].trim()}
+                      </span>
+                    )}
+                  </GlassButton>
+                ))}
+              </div>
+            </div>
+          )}
+        </GlassCard>
+
+        {/* ── Card grid ── */}
+        {isLoading ? (
+          <div className="flex items-center justify-center py-20">
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ repeat: Infinity, duration: 2, ease: 'linear' }}
+              className="w-8 h-8 border-2 border-[#fc88c6]/60 border-t-transparent rounded-full"
+            />
+          </div>
+        ) : cards && cards.length > 0 ? (
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.04 } } }}
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-4 justify-items-center"
+          >
+            {cards.map((card) => (
+              <motion.div
+                key={card._id}
+                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
+                className="w-full"
+              >
+                <CardContainer
+                  id={card._id}
+                  name={card.name}
+                  information={card.information}
+                  rarity={card.rarity}
+                  image={card.image}
+                  generation={card.generation || undefined}
+                  owned={isLoggedIn ? ownedIds.has(card._id) : false}
+                  layoutId={`card-zoom-${card._id}`}
+                  onClick={() => setSelectedCard(card as CardData)}
+                />
+              </motion.div>
+            ))}
+          </motion.div>
+        ) : (
+          <GlassCard hover={false} className="p-12 text-center">
+            <p className="text-slate-500 dark:text-slate-400 text-lg">{t('noCards')}</p>
+            <span className="text-4xl mt-3 block">🃏</span>
+          </GlassCard>
+        )}
+      </div>
+
+      {/* ── Card detail modal ── */}
+      <CardDetailModal
+        card={selectedCard}
+        owned={selectedCard ? (isLoggedIn ? ownedIds.has(selectedCard._id) : false) : false}
+        onClose={() => setSelectedCard(null)}
+      />
+    </LayoutGroup>
+  );
+}
+

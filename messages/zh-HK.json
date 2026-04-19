@@ -1,0 +1,179 @@
+{
+  "common": {
+    "appName": "Minus H Card",
+    "loading": "載入中...",
+    "save": "儲存",
+    "cancel": "取消",
+    "confirm": "確認",
+    "delete": "刪除",
+    "edit": "編輯",
+    "back": "返回",
+    "search": "搜尋",
+    "filter": "篩選",
+    "all": "全部",
+    "error": "出現錯誤",
+    "success": "成功！"
+  },
+  "nav": {
+    "home": "首頁",
+    "gallery": "卡牌圖鑑",
+    "collection": "我的收藏",
+    "explore": "抽卡",
+    "friends": "好友",
+    "profile": "個人檔案",
+    "login": "登入",
+    "register": "註冊",
+    "logout": "登出",
+    "logoutConfirm": "確定要登出嗎？"
+  },
+  "auth": {
+    "email": "電子郵件",
+    "password": "密碼",
+    "displayName": "顯示名稱",
+    "loginTitle": "歡迎回來 ✿",
+    "registerTitle": "加入冒險 ✿",
+    "loginButton": "登入",
+    "registerButton": "建立帳號",
+    "noAccount": "還沒有帳號？",
+    "hasAccount": "已經有帳號？",
+    "emailRequired": "請輸入電子郵件",
+    "passwordRequired": "請輸入密碼",
+    "emailExists": "此電子郵件已被註冊",
+    "keepMeLoggedIn": "保持登入狀態"
+  },
+  "home": {
+    "hero": "探索愛的卡牌",
+    "subtitle": "收集、交易，解鎖宇宙中最可愛的卡牌",
+    "startExploring": "開始探索",
+    "viewCollection": "我的收藏",
+    "featuredCards": "精選卡牌"
+  },
+  "gallery": {
+    "title": "卡牌圖鑑",
+    "filterByRarity": "全部",
+    "filterByName": "按名稱搜尋",
+    "noCards": "找不到卡牌",
+    "generation": "世代",
+    "generationsPanel": {
+      "label": "{count} 個世代"
+    },
+    "generations": {
+      "all": "全部世代",
+      "H1": "H1世代",
+      "H2": "H2世代"
+    },
+    "rarities": {
+      "common": "C",
+      "uncommon": "UC",
+      "rare": "R",
+      "superRare": "SR",
+      "epic": "SSR",
+      "legendary": "-H"
+    }
+  },
+  "collection": {
+    "title": "我的收藏",
+    "empty": "你的收藏是空的，快去探索吧！",
+    "milestone": "收藏里程碑！",
+    "crystalUnlocked": "已解鎖結晶化版本！",
+    "progress": "進度",
+    "totalCards": "總卡牌數",
+    "uniqueCards": "獨特卡牌",
+    "sort": {
+      "default": "預設",
+      "name": "名稱",
+      "rarity": "稀有度",
+      "quantity": "數量"
+    }
+  },
+  "explore": {
+    "title": "抽卡",
+    "subtitle": "尋找 H 能量來升級稀有度",
+    "energy": "H 能量",
+    "tap": "點擊探索！",
+    "found": "你找到了 {amount} H 能量！",
+    "cooldown": "下次探索可在 {time} 後進行",
+    "upgrade": "升級卡牌",
+    "upgradeSuccess": "卡牌升級成功！",
+    "attemptsLeft": "剩餘次數：{count}",
+    "noAttemptsLeft": "明天再來獲取更多 H 能量！",
+    "draw": {
+      "title": "抽取卡牌",
+      "subtitle": "消耗 10 H 能量抽取隨機卡牌",
+      "cost": "10 H 能量",
+      "button": "抽卡！",
+      "drawing": "抽取中...",
+      "result": "你獲得了：",
+      "notEnoughEnergy": "需要 10 H 能量才能抽卡，繼續探索吧！",
+      "drawAnother": "再抽一次",
+      "addedToCollection": "已加入你的收藏！",
+      "seedCards": "初始化卡牌資料庫",
+      "selectGeneration": "世代",
+      "allGenerations": "全部"
+    },
+    "gacha": "抽卡",
+    "pack": {
+      "cutting": "✂ 開封中...",
+      "opening": "✨ 開包中...",
+      "cardsDrawn": "抽到 {count} 張卡牌！",
+      "oneByOne": "逐張查看",
+      "viewAll": "全部查看",
+      "skipViewAll": "跳過 — 查看全部卡牌",
+      "viewSummary": "✨ 查看總覽",
+      "summaryTitle": "{count} 張卡牌",
+      "rarePlus": "{count} 張稀有+",
+      "allCollected": "全部收藏！"
+    }
+  },
+  "social": {
+    "title": "社交",
+    "gift": "贈送卡牌",
+    "giftTo": "送給朋友",
+    "noFriends": "先通過朋友代碼添加朋友，才可以送禮物",
+    "giftSuccess": "卡牌贈送成功！",
+    "badges": "社交徽章",
+    "friendList": "好友列表",
+    "bless": "祝福好友",
+    "blessDescription": "送出重複的卡牌來解鎖特殊徽章"
+  },
+  "profile": {
+    "title": "我的檔案",
+    "editName": "編輯顯示名稱",
+    "saveChanges": "儲存變更",
+    "stats": "統計",
+    "cardsCollected": "已收集卡牌",
+    "giftsGiven": "已贈送禮物",
+    "badgesEarned": "已獲得徽章",
+    "energyTotal": "總獲得能量",
+    "friendCode": "我的好友碼"
+  },
+  "friends": {
+    "title": "好友",
+    "subtitle": "連結並分享你的收藏",
+    "myCode": "我的好友碼",
+    "addFriend": "添加好友",
+    "addByCode": "輸入好友碼（例如 1234-5678-9012）",
+    "send": "添加",
+    "adding": "添加中...",
+    "noFriends": "還沒有好友，快分享你的碼吧！",
+    "viewCards": "查看卡牌",
+    "removeFriend": "移除",
+    "friendCards": "{name} 的收藏",
+    "back": "返回好友列表",
+    "loginRequired": "請登入以使用好友功能。",
+    "alreadyFriends": "已是好友！",
+    "notFound": "找不到此碼的用戶。",
+    "sendRequest": "發送好友請求",
+    "acceptRequest": "接受好友請求",
+    "sending": "發送中..."
+  },
+  "notifications": {
+    "title": "通知",
+    "markAllRead": "全部標為已讀",
+    "empty": "當前沒有通知",
+    "justNow": "剛剛",
+    "minutesAgo": "{mins}分鐘前",
+    "hoursAgo": "{hours}小時前",
+    "daysAgo": "{days}天前"
+  }
+}
