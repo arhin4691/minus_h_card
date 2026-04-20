@@ -45,7 +45,7 @@
   "home": {
     "hero": "Discover Love Cards",
     "subtitle": "Collect, trade, and unlock the cutest cards in the universe",
-    "startExploring": "Start Exploring",
+    "startExploring": "Let's recruit personnel",
     "viewCollection": "My Collection",
     "featuredCards": "Featured Cards"
   },
@@ -69,7 +69,8 @@
       "rare": "R",
       "superRare": "SR",
       "epic": "SSR",
-      "legendary": "-H"
+      "legendary": "-H",
+      "notOwned": "Not owned"
     }
   },
   "collection": {
@@ -146,7 +147,15 @@
     "giftsGiven": "Gifts Given",
     "badgesEarned": "Badges Earned",
     "energyTotal": "Total H Energy Earned",
-    "friendCode": "My Friend Code"
+    "friendCode": "My Friend Code",
+    "changePassword": "Change Password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password",
+    "passwordChanged": "Password changed successfully!",
+    "passwordMismatch": "Passwords do not match",
+    "passwordTooShort": "Password must be at least 6 characters",
+    "incorrectPassword": "Current password is incorrect"
   },
   "friends": {
     "title": "Friends",

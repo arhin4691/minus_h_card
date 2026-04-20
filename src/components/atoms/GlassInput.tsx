@@ -23,7 +23,7 @@ const GlassInput = forwardRef<HTMLInputElement, GlassInputProps>(
             bg-white/20 dark:bg-white/5
             backdrop-blur-xl
             border border-white/30 dark:border-white/10
-            rounded-2xl
+            rounded-xl
             text-slate-800 dark:text-slate-100
             placeholder:text-slate-400 dark:placeholder:text-slate-500
             focus:outline-none focus:ring-2 focus:ring-pink-300/50 focus:border-pink-300/50

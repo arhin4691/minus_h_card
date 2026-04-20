@@ -34,8 +34,19 @@ export default function DailyExploration() {
   const [attemptsLeft, setAttemptsLeft] = useState(MAX_DAILY_ATTEMPTS);
   const [attemptsLoaded, setAttemptsLoaded] = useState(false);
 
-  // Draw generation selection
+  // Draw generation selection — default to the newest generation on first load
   const [selectedGeneration, setSelectedGeneration] = useState<string>('all');
+  const hasDefaultedGen = useRef(false);
+
+  useEffect(() => {
+    if (!hasDefaultedGen.current && generations && generations.length > 0) {
+      const newest = [...generations].sort(
+        (a, b) => new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime()
+      )[0];
+      setSelectedGeneration(newest.code);
+      hasDefaultedGen.current = true;
+    }
+  }, [generations]);
 
   // Explore animation state
   const [lastFound, setLastFound] = useState<number | null>(null);
@@ -257,35 +268,122 @@ export default function DailyExploration() {
                     const grad = GRAD_PALETTE[idx % GRAD_PALETTE.length];
                     const isSelected = selectedGeneration === gen.code;
                     return (
-                      <button
+                      /* ── Booster-pack shaped card ── */
+                      <div
                         key={gen._id}
-                        onClick={() => setSelectedGeneration(gen.code)}
-                        className={`relative rounded-2xl overflow-hidden transition-all duration-200 text-left shrink-0 snap-start mt-5 ${isSelected ? 'w-40 h-36' : 'w-32 h-24'} ${
-                          isSelected
-                            ? 'ring-2 ring-[#fc88c6] ring-offset-2 ring-offset-transparent scale-[1.03]'
-                            : 'hover:scale-[1.02] opacity-75 hover:opacity-100'
-                        }`}
-                        title={gen.nameJa}
+                        className="shrink-0 snap-start mt-5 p-5"
+                        style={{ perspective: '700px' }}
                       >
-                        <div className={`absolute inset-0 bg-gradient-to-br ${""}`} />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/65 to-transparent" />
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={`/collections/cover/${gen.code}.jpg`}
-                          alt=""
-                          className="absolute inset-0 w-full h-full object-cover object-top opacity-40"
-                          onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-                        />
-                        <div className="relative h-full flex flex-col justify-between p-3">
-                          <span className="text-xl font-black text-white drop-shadow-lg leading-none">{gen.code}</span>
-                          <div>
-                            <p className="text-[13px] font-semibold text-white/90 leading-tight line-clamp-1">{gen.nameJa}</p>
+                        <motion.button
+                          onClick={() => setSelectedGeneration(gen.code)}
+                          className="relative overflow-hidden cursor-pointer block"
+                          style={{
+                            width: isSelected ? '156px' : '130px',
+                            height: isSelected ? '234px' : '195px',
+                            borderRadius: '10px',
+                            transformStyle: 'preserve-3d',
+                            transformOrigin: 'center bottom',
+                          }}
+                          animate={isSelected
+                            ? { rotateY: -10, rotateX: 3, y: -10, boxShadow: '8px 14px 35px rgba(252,136,198,0.45), 3px 6px 20px rgba(0,0,0,0.65)' }
+                            : { rotateY: 0, rotateX: 0, y: 0, boxShadow: '4px 8px 22px rgba(0,0,0,0.45)' }
+                          }
+                          whileHover={!isSelected
+                            ? { rotateY: -14, rotateX: 5, y: -8, boxShadow: '10px 18px 38px rgba(0,0,0,0.7)' }
+                            : {}
+                          }
+                          transition={{ type: 'spring', stiffness: 280, damping: 22 }}
+                          title={gen.nameJa}
+                        >
+                          {/* ── Gradient fallback (shows when image not loaded) ── */}
+                          <div className={`absolute inset-0 bg-gradient-to-br ${""}`} />
+
+                          {/* ── Pack artwork ── */}
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={`${process.env.NEXT_PUBLIC_IMAGEKIT_URL}/collections/covers/${gen.code}.png?tr=w-200,h-300,fo-auto,pr-true,q-80`}
+                            alt=""
+                            className="absolute inset-0 w-full h-full object-cover object-top"
+                            onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+                          />
+
+                          {/* ── Dark scrim for readability ── */}
+                          <div className="absolute inset-0 bg-gradient-to-b from-black/55 via-black/10 to-black/80" />
+
+                          {/* ── Top header band ── */}
+                          <div className="absolute top-0 left-0 right-0 z-20 h-7 bg-black/60 flex items-center justify-center">
+                            <span className="text-white/90 text-[7px] font-black tracking-[0.16em] uppercase select-none">
+                              Minus H Card
+                            </span>
+                          </div>
+
+                          {/* ── Perforation / tear line ── */}
+                          <div
+                            className="absolute left-1.5 right-1.5 z-20 pointer-events-none"
+                            style={{ top: '27px', borderBottom: '1px dashed rgba(255,255,255,0.5)' }}
+                          />
+                          {/* Scissors at tear */}
+                          <span
+                            className="absolute z-20 pointer-events-none select-none text-white/40"
+                            style={{ top: '20px', right: '5px', fontSize: '8px', lineHeight: 1 }}
+                          >
+                            ✂
+                          </span>
+
+                          {/* ── Holographic top-left sheen ── */}
+                          <div
+                            className="absolute inset-0 z-10 pointer-events-none"
+                            style={{
+                              background: 'linear-gradient(135deg, rgba(255,255,255,0.22) 0%, transparent 45%)',
+                            }}
+                          />
+
+                          {/* ── Animated rainbow sheen (selected only) ── */}
+                          {isSelected && (
+                            <motion.div
+                              className="absolute inset-0 z-10 pointer-events-none"
+                              // animate={{
+                              //   background: [
+                              //     'linear-gradient(120deg, rgba(252,136,198,0.3) 0%, transparent 45%, rgba(147,51,234,0.2) 90%)',
+                              //     'linear-gradient(120deg, rgba(96,165,250,0.2) 0%, rgba(252,136,198,0.25) 50%, transparent 100%)',
+                              //     'linear-gradient(120deg, rgba(147,51,234,0.2) 0%, transparent 55%, rgba(252,136,198,0.3) 100%)',
+                              //   ],
+                              // }}
+                              transition={{ duration: 2.5, repeat: Infinity, ease: 'linear' }}
+                            />
+                          )}
+
+                          {/* ── Left-edge highlight (3D depth) ── */}
+                          <div
+                            // className="absolute top-0 left-0 bottom-0 z-20 pointer-events-none"
+                            style={{
+                              width: '6px',
+                              borderRadius: '10px 0 0 10px',
+                              background: 'linear-gradient(to right, rgba(255,255,255,0.28), transparent)',
+                            }}
+                          />
+
+                          {/* ── Bottom info band ── */}
+                          <div className="absolute bottom-0 left-0 right-0 z-20 px-2.5 pb-2.5 pt-8 bg-gradient-to-t from-black via-black/60 to-transparent">
+                            <p className="text-white font-black text-[11px] leading-tight tracking-wide drop-shadow">{gen.code}</p>
+                            <p className="text-white/65 text-[16px] leading-tight line-clamp-1 mt-0.5">{gen.nameJa}</p>
                             {isSelected && gen.description && (
-                              <p className="text-[9px] text-white/60 leading-tight line-clamp-2 mt-0.5">{gen.description}</p>
+                              <p className="text-white/45 text-[7px] leading-tight line-clamp-1 mt-0.5">{gen.description}</p>
                             )}
                           </div>
-                        </div>
-                      </button>
+
+                          {/* ── Selection inset glow ring ── */}
+                          {isSelected && (
+                            <div
+                              className="absolute inset-0 z-30 pointer-events-none"
+                              style={{
+                                borderRadius: '10px',
+                                boxShadow: 'inset 0 0 0 2px rgba(252,136,198,0.9), inset 0 0 14px rgba(252,136,198,0.2)',
+                              }}
+                            />
+                          )}
+                        </motion.button>
+                      </div>
                     );
                   })}
               </div>

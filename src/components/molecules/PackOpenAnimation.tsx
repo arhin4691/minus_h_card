@@ -14,6 +14,7 @@ interface PackCard {
   information: string;
   rarity: CardRarity;
   image: string;
+  isNew?: boolean;
 }
 
 interface PackOpenAnimationProps {
@@ -51,6 +52,7 @@ export default function PackOpenAnimation({ cards, onClose }: PackOpenAnimationP
   const [stage, setStage] = useState<Stage>(0);
   const [revealedIndex, setRevealedIndex] = useState(0);
   const [flashColor, setFlashColor] = useState<string | null>(null);
+  const [isNewFlash, setIsNewFlash] = useState(false);
   const [seenSet, setSeenSet] = useState<Set<number>>(new Set());
   const burstKey = useRef(0);
 
@@ -68,24 +70,32 @@ export default function PackOpenAnimation({ cards, onClose }: PackOpenAnimationP
     return () => { clearTimeout(t1); clearTimeout(t2); };
   }, [multi]);
 
-  const triggerReveal = useCallback((idx: number, rarity: CardRarity) => {
+  const triggerReveal = useCallback((idx: number, rarity: CardRarity, isNew?: boolean) => {
     setRevealedIndex(idx);
     setSeenSet((prev) => new Set([...prev, idx]));
-    setFlashColor(RARITY_FLASH[rarity]);
-    burstKey.current += 1;
-    setTimeout(() => setFlashColor(null), 300);
+    if (isNew) {
+      setIsNewFlash(true);
+      setFlashColor('rgba(252,136,198,0.95)');
+      burstKey.current += 1;
+      setTimeout(() => { setFlashColor(null); setIsNewFlash(false); }, 600);
+    } else {
+      setIsNewFlash(false);
+      setFlashColor(RARITY_FLASH[rarity]);
+      burstKey.current += 1;
+      setTimeout(() => setFlashColor(null), 300);
+    }
   }, []);
 
   useEffect(() => {
-    if (stage === 3 && multi) triggerReveal(0, cards[0].rarity);
+    if (stage === 3 && multi) triggerReveal(0, cards[0].rarity, cards[0].isNew);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stage]);
 
   function goNext() {
-    if (revealedIndex < cards.length - 1) triggerReveal(revealedIndex + 1, cards[revealedIndex + 1].rarity);
+    if (revealedIndex < cards.length - 1) triggerReveal(revealedIndex + 1, cards[revealedIndex + 1].rarity, cards[revealedIndex + 1].isNew);
   }
   function goPrev() {
-    if (revealedIndex > 0) triggerReveal(revealedIndex - 1, cards[revealedIndex - 1].rarity);
+    if (revealedIndex > 0) triggerReveal(revealedIndex - 1, cards[revealedIndex - 1].rarity, cards[revealedIndex - 1].isNew);
   }
 
   function viewAll() {
@@ -108,13 +118,23 @@ export default function PackOpenAnimation({ cards, onClose }: PackOpenAnimationP
         {flashColor && (
           <motion.div
             key="flash"
-            initial={{ opacity: 0.85 }}
+            initial={{ opacity: isNewFlash ? 1 : 0.85 }}
             animate={{ opacity: 0 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: isNewFlash ? 0.6 : 0.3 }}
             className="absolute inset-0 z-50 pointer-events-none"
             style={{ background: flashColor }}
-          />
+          >
+            {/* Extra shimmer sweep for "New!" cards */}
+            {isNewFlash && (
+              <motion.div
+                initial={{ x: '-100%', skewX: -20 }}
+                animate={{ x: '200%' }}
+                transition={{ duration: 0.55, ease: 'easeIn' }}
+                className="absolute inset-y-0 w-1/2 bg-white/60 blur-sm"
+              />
+            )}
+          </motion.div>
         )}
       </AnimatePresence>
 
@@ -247,10 +267,22 @@ export default function PackOpenAnimation({ cards, onClose }: PackOpenAnimationP
                 animate={{ rotateY: 0, opacity: 1, scale: 1 }}
                 exit={{ rotateY: -90, opacity: 0, scale: 0.85 }}
                 transition={{ type: "spring", stiffness: 240, damping: 22 }}
-                style={{ perspective: "900px" }} className="w-full">
+                style={{ perspective: "900px" }} className="w-full relative">
                 <CardContainer id={currentCard._id} name={currentCard.name}
                   information={currentCard.information} rarity={currentCard.rarity}
                   image={currentCard.image} owned />
+                {/* "New" badge */}
+                {currentCard.isNew && (
+                  <motion.div
+                    initial={{ scale: 0, rotate: -15 }}
+                    animate={{ scale: 1, rotate: -12 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 15, delay: 0.15 }}
+                    className="absolute -top-3 -right-2 z-20 px-2.5 py-1 rounded-full text-[11px] font-black tracking-wider text-white shadow-lg pointer-events-none"
+                    style={{ background: 'linear-gradient(135deg, #fc88c6, #a855f7)' }}
+                  >
+                    NEW ✦
+                  </motion.div>
+                )}
               </motion.div>
             </AnimatePresence>
             {/* Nav dots */}
@@ -262,7 +294,7 @@ export default function PackOpenAnimation({ cards, onClose }: PackOpenAnimationP
                 </button>
                 <div className="flex gap-1.5">
                   {cards.map((c, i) => (
-                    <button key={i} onClick={() => triggerReveal(i, c.rarity)}
+                    <button key={i} onClick={() => triggerReveal(i, c.rarity, c.isNew)}
                       className={`rounded-full transition-all ${
                         i === revealedIndex
                           ? 'w-2.5 h-2.5 bg-[#fc88c6] scale-125'
@@ -347,7 +379,7 @@ export default function PackOpenAnimation({ cards, onClose }: PackOpenAnimationP
             >
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 pb-2">
                 {cards.map((c, i) => (
-                  <div key={i} className="w-full">
+                  <div key={i} className="w-full relative">
                     <CardContainer
                       id={c._id}
                       name={c.name}
@@ -356,6 +388,14 @@ export default function PackOpenAnimation({ cards, onClose }: PackOpenAnimationP
                       image={c.image}
                       owned
                     />
+                    {c.isNew && (
+                      <div
+                        className="absolute -top-2 -right-1 z-20 px-2 py-0.5 rounded-full text-[10px] font-black text-white pointer-events-none"
+                        style={{ background: 'linear-gradient(135deg, #fc88c6, #a855f7)' }}
+                      >
+                        NEW
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

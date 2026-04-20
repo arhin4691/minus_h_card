@@ -10,6 +10,7 @@ export interface DrawnCard {
   information: string;
   rarity: CardRarity;
   image: string;
+  isNew?: boolean;
 }
 
 interface DrawResult {

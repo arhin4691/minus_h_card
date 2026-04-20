@@ -5,6 +5,7 @@ import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { useTranslations } from "next-intl";
 import RarityBadge from "@/components/atoms/RarityBadge";
 import type { CardRarity } from "@/models/Card";
+import { getCardImageUrl } from "@/lib/imagekit";
 
 interface CardContainerProps {
   id: string;
@@ -145,7 +146,7 @@ export default function CardContainer({
             style={{ paddingBottom: "140%" }}
           >
             <img
-              src={owned === false ? "/white.png" : image}
+              src={owned === false ? "/white.png" : getCardImageUrl(image)}
               alt={name}
               className="absolute inset-0 w-full h-full object-cover object-top"
             />
@@ -188,7 +189,7 @@ export default function CardContainer({
               <div className="absolute inset-0 z-30 backdrop-blur-md bg-black/50 flex flex-col items-center justify-center gap-2">
                 <span className="text-3xl">&#128274;</span>
                 <span className="text-xs font-semibold text-white/80">
-                  Not owned
+                  {t('notOwned')}
                 </span>
               </div>
             )}
@@ -254,7 +255,7 @@ export default function CardContainer({
                 style={{ boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.55), 0 0 0 2px rgba(0,0,0,0.3)' }}
               >
                 <img
-                  src={image}
+                  src={getCardImageUrl(image)}
                   alt={name}
                   className="w-full h-full object-cover object-top"
                 />

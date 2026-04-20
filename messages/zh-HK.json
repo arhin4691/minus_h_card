@@ -44,7 +44,7 @@
   "home": {
     "hero": "探索愛的卡牌",
     "subtitle": "收集、交易，解鎖宇宙中最可愛的卡牌",
-    "startExploring": "開始探索",
+    "startExploring": "立即招募人員！",
     "viewCollection": "我的收藏",
     "featuredCards": "精選卡牌"
   },
@@ -68,7 +68,8 @@
       "rare": "R",
       "superRare": "SR",
       "epic": "SSR",
-      "legendary": "-H"
+      "legendary": "-H",
+      "notOwned": "未擁有"
     }
   },
   "collection": {
@@ -145,7 +146,15 @@
     "giftsGiven": "已贈送禮物",
     "badgesEarned": "已獲得徽章",
     "energyTotal": "總獲得能量",
-    "friendCode": "我的好友碼"
+    "friendCode": "我的好友碼",
+    "changePassword": "更改密碼",
+    "currentPassword": "現有密碼",
+    "newPassword": "新密碼",
+    "confirmNewPassword": "確認新密碼",
+    "passwordChanged": "密碼已成功更改！",
+    "passwordMismatch": "密碼不符",
+    "passwordTooShort": "密碼須至少 6 個字元",
+    "incorrectPassword": "現有密碼不正確"
   },
   "friends": {
     "title": "好友",

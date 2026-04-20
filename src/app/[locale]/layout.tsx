@@ -39,7 +39,9 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <head />
+      <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+      </head>
       <body className="antialiased font-sans">
         {/* Anti-flash: apply dark class before first paint */}
         <Script

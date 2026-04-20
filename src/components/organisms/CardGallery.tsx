@@ -1,6 +1,6 @@
 ﻿'use client';
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { useCards, useCollection } from '@/hooks/useCards';
 import { useGenerations } from '@/hooks/useGenerations';
@@ -39,6 +39,36 @@ export default function CardGallery() {
   const { data: generations } = useGenerations();
   const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
 
+  // Shrinking sticky bar — track how far past the sticky point we've scrolled
+  const barRef = useRef<HTMLDivElement>(null);
+  const barOriginRef = useRef<number | null>(null);
+  const STICKY_TOP_PX = 100; // matches sticky top-25 (6.25 rem)
+  const [compactAmount, setCompactAmount] = useState(0); // 0 = full, 1 = fully compact
+
+  useEffect(() => {
+    function measureOrigin() {
+      if (barRef.current && barOriginRef.current === null) {
+        barOriginRef.current = barRef.current.getBoundingClientRect().top + window.scrollY;
+      }
+    }
+    measureOrigin();
+
+    function onScroll() {
+      measureOrigin();
+      const origin = barOriginRef.current ?? 0;
+      // how much extra the user has scrolled PAST the sticky lock-in point
+      const overScroll = Math.max(0, window.scrollY - (origin - STICKY_TOP_PX));
+      // 0 → full size, 1 → mini (clamp to 1 within 80px of extra scroll)
+      setCompactAmount(Math.min(1, overScroll / 80));
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // Derived compact boolean (past half-way → compact layout)
+  const isCompact = compactAmount > 0.5;
+
   // Build a Set of owned card IDs for O(1) lookup
   const ownedIds = useMemo(
     () => new Set(collection?.map((c) => c.cardId._id) ?? []),
@@ -49,68 +79,79 @@ export default function CardGallery() {
     <LayoutGroup>
       <div className="space-y-6">
         {/* ── Filters ── */}
-        <GlassCard hover={false} className="p-5 space-y-3 sticky top-25 z-50">
-          {/* Search + rarity row */}
-          <div className="flex flex-col sm:flex-row gap-4 mb-3">
-            <div className="flex-1">
-              <div className="relative">
-                <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                <GlassInput
-                  placeholder={t('filterByName')}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9"
-                />
+        <div ref={barRef} className="sticky top-25 z-50">
+          <GlassCard
+            hover={false}
+            className="overflow-hidden transition-all duration-300"
+          >
+            <div
+              className="transition-all duration-300"
+              style={{ padding: isCompact ? '0.375rem 0.75rem' : '1.25rem' }}
+            >
+            {/* Search row — always visible */}
+            <div className={`flex flex-col sm:flex-row gap-4 transition-all duration-300 ${isCompact ? 'mb-0' : 'mb-3'}`}>
+              <div className="flex-1">
+                <div className="relative">
+                  <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <GlassInput
+                    placeholder={t('filterByName')}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className={`pl-9 transition-all duration-300 ${isCompact ? 'py-1 text-sm' : ''}`}
+                  />
+                </div>
+              </div>
+              {/* Rarity filters — collapse into a single row when compact */}
+              <div className={`flex items-center gap-1.5 transition-all duration-300 ${isCompact ? 'hidden sm:flex' : 'flex'}`}>
+                <Filter size={14} className="text-slate-400 mr-1" />
+                <div className="flex flex-wrap gap-1.5">
+                  {RARITIES.map((r) => (
+                    <GlassButton
+                      key={r}
+                      size="sm"
+                      variant={activeRarityFilter === r ? 'primary' : 'ghost'}
+                      onClick={() => setRarityFilter(r)}
+                    >
+                      {r === 'all' ? t('filterByRarity') : t(`rarities.${r}`)}
+                    </GlassButton>
+                  ))}
+                </div>
               </div>
             </div>
-            <div className="flex items-center gap-1.5">
-              <Filter size={14} className="text-slate-400 mr-1" />
-              <div className="flex flex-wrap gap-1.5">
-                {RARITIES.map((r) => (
-                  <GlassButton
-                    key={r}
-                    size="sm"
-                    variant={activeRarityFilter === r ? 'primary' : 'ghost'}
-                    onClick={() => setRarityFilter(r)}
-                  >
-                    {r === 'all' ? t('filterByRarity') : t(`rarities.${r}`)}
-                  </GlassButton>
-                ))}
-              </div>
-            </div>
-          </div>
 
-          {/* Generation filter row — dynamically loaded */}
-          {generations && generations.length > 0 && (
-            <div className="flex items-center gap-1.5">
-              <Layers size={14} className="text-slate-400 mr-1" />
-              <div className="flex flex-wrap gap-1.5">
-                <GlassButton
-                  size="sm"
-                  variant={activeGenerationFilter === 'all' ? 'primary' : 'ghost'}
-                  onClick={() => setGenerationFilter('all')}
-                >
-                  {t('generations.all')}
-                </GlassButton>
-                {generations.map((gen) => (
+            {/* Generation filter row — hidden when compact */}
+            {!isCompact && generations && generations.length > 0 && (
+              <div className="flex items-center gap-1.5">
+                <Layers size={14} className="text-slate-400 mr-1" />
+                <div className="flex flex-wrap gap-1.5">
                   <GlassButton
-                    key={gen._id}
                     size="sm"
-                    variant={activeGenerationFilter === gen.code ? 'primary' : 'ghost'}
-                    onClick={() => setGenerationFilter(gen.code)}
+                    variant={activeGenerationFilter === 'all' ? 'primary' : 'ghost'}
+                    onClick={() => setGenerationFilter('all')}
                   >
-                    <span>{gen.code}</span>
-                    {activeGenerationFilter === gen.code && (
-                      <span className="hidden sm:inline ml-1 opacity-75 text-[10px] font-normal">
-                        {gen.nameEn.split('—')[0].trim()}
-                      </span>
-                    )}
+                    {t('generations.all')}
                   </GlassButton>
-                ))}
+                  {generations.map((gen) => (
+                    <GlassButton
+                      key={gen._id}
+                      size="sm"
+                      variant={activeGenerationFilter === gen.code ? 'primary' : 'ghost'}
+                      onClick={() => setGenerationFilter(gen.code)}
+                    >
+                      <span>{gen.code}</span>
+                      {activeGenerationFilter === gen.code && (
+                        <span className="hidden sm:inline ml-1 opacity-75 text-[10px] font-normal">
+                          {gen.nameEn.split('—')[0].trim()}
+                        </span>
+                      )}
+                    </GlassButton>
+                  ))}
+                </div>
               </div>
+            )}
             </div>
-          )}
-        </GlassCard>
+          </GlassCard>
+        </div>
 
         {/* ── Card grid ── */}
         {isLoading ? (

@@ -18,8 +18,11 @@ import {
   FolderHeart,
   Copy,
   Check,
+  Lock,
+  Eye,
+  EyeOff,
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   saveSession,
   clearPersistedSession,
@@ -44,6 +47,18 @@ export default function ProfilePage() {
   const [friendCode, setFriendCode] = useState<string | null>(null);
   const [codeCopied, setCodeCopied] = useState(false);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+
+  // Change password state
+  const [showPasswordSection, setShowPasswordSection] = useState(false);
+  const [pwCurrent, setPwCurrent] = useState("");
+  const [pwNew, setPwNew] = useState("");
+  const [pwConfirm, setPwConfirm] = useState("");
+  const [pwError, setPwError] = useState("");
+  const [pwSuccess, setPwSuccess] = useState(false);
+  const [pwSubmitting, setPwSubmitting] = useState(false);
+  const [showPwCurrent, setShowPwCurrent] = useState(false);
+  const [showPwNew, setShowPwNew] = useState(false);
+  const [showPwConfirm, setShowPwConfirm] = useState(false);
 
   // Login/Register form state
   const [isLoginMode, setIsLoginMode] = useState(true);
@@ -138,6 +153,51 @@ export default function ProfilePage() {
   function handleLogout() {
     clearUser();
     clearPersistedSession();
+  }
+
+  async function handleChangePassword(e: React.FormEvent) {
+    e.preventDefault();
+    setPwError("");
+    setPwSuccess(false);
+    if (pwNew !== pwConfirm) {
+      setPwError(t("passwordMismatch"));
+      return;
+    }
+    if (pwNew.length < 6) {
+      setPwError(t("passwordTooShort"));
+      return;
+    }
+    setPwSubmitting(true);
+    try {
+      const sessionToken = useStore.getState().sessionToken;
+      const res = await fetch("/api/auth/change-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId,
+          sessionToken,
+          currentPassword: pwCurrent,
+          newPassword: pwNew,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setPwError(data.error ?? t("incorrectPassword"));
+        return;
+      }
+      setPwSuccess(true);
+      setPwCurrent("");
+      setPwNew("");
+      setPwConfirm("");
+      setTimeout(() => {
+        setPwSuccess(false);
+        setShowPasswordSection(false);
+      }, 2500);
+    } catch {
+      setPwError("Network error");
+    } finally {
+      setPwSubmitting(false);
+    }
   }
 
   function copyFriendCode() {
@@ -397,6 +457,109 @@ export default function ProfilePage() {
             </GlassButton>
           )}
         </div>
+      </GlassCard>
+
+      {/* Change Password */}
+      <GlassCard hover={false} className="p-6">
+        <button
+          onClick={() => {
+            setShowPasswordSection((v) => !v);
+            setPwError("");
+            setPwSuccess(false);
+          }}
+          className="flex items-center gap-2 w-full text-left text-slate-700 dark:text-slate-200 font-semibold"
+        >
+          <Lock size={16} className="text-[#d4509a] dark:text-[#fc88c6]" />
+          {t("changePassword")}
+          <span className="ml-auto text-slate-400 text-sm">
+            {showPasswordSection ? "▲" : "▼"}
+          </span>
+        </button>
+
+        <AnimatePresence>
+          {showPasswordSection && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="overflow-hidden"
+            >
+              <form onSubmit={handleChangePassword} className="mt-4 space-y-3">
+                {/* Current password */}
+                <div className="relative">
+                  <GlassInput
+                    label={t("currentPassword")}
+                    type={showPwCurrent ? "text" : "password"}
+                    value={pwCurrent}
+                    onChange={(e) => setPwCurrent(e.target.value)}
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPwCurrent((v) => !v)}
+                    className="absolute right-3 top-9 text-slate-400 hover:text-slate-600 transition-colors"
+                  >
+                    {showPwCurrent ? <EyeOff size={15} /> : <Eye size={15} />}
+                  </button>
+                </div>
+
+                {/* New password */}
+                <div className="relative">
+                  <GlassInput
+                    label={t("newPassword")}
+                    type={showPwNew ? "text" : "password"}
+                    value={pwNew}
+                    onChange={(e) => setPwNew(e.target.value)}
+                    required
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPwNew((v) => !v)}
+                    className="absolute right-3 top-9 text-slate-400 hover:text-slate-600 transition-colors"
+                  >
+                    {showPwNew ? <EyeOff size={15} /> : <Eye size={15} />}
+                  </button>
+                </div>
+
+                {/* Confirm new password */}
+                <div className="relative">
+                  <GlassInput
+                    label={t("confirmNewPassword")}
+                    type={showPwConfirm ? "text" : "password"}
+                    value={pwConfirm}
+                    onChange={(e) => setPwConfirm(e.target.value)}
+                    required
+                    error={pwError}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPwConfirm((v) => !v)}
+                    className="absolute right-3 top-9 text-slate-400 hover:text-slate-600 transition-colors"
+                  >
+                    {showPwConfirm ? <EyeOff size={15} /> : <Eye size={15} />}
+                  </button>
+                </div>
+
+                {pwSuccess && (
+                  <p className="text-sm text-emerald-500 font-medium">
+                    {t("passwordChanged")}
+                  </p>
+                )}
+
+                <GlassButton
+                  type="submit"
+                  variant="primary"
+                  size="sm"
+                  className="w-full"
+                  disabled={pwSubmitting}
+                >
+                  {pwSubmitting ? "..." : t("saveChanges")}
+                </GlassButton>
+              </form>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </GlassCard>
 
       {/* Social Gifting */}

@@ -42,9 +42,9 @@
     "keepMeLoggedIn": "ログイン状態を保つ"
   },
   "home": {
-    "hero": "愛のカードを発見しよう",
-    "subtitle": "宇宙で最もかわいいカードを集めて、交換して、アンロックしよう",
-    "startExploring": "探検を始める",
+    "hero": "カードを発見しよう",
+    "subtitle": "人材カードを集めて、交換して、アンロックしよう",
+    "startExploring": "人材を募集する",
     "viewCollection": "マイコレクション",
     "featuredCards": "注目のカード"
   },
@@ -68,7 +68,8 @@
       "rare": "R",
       "superRare": "SR",
       "epic": "SSR",
-      "legendary": "-H"
+      "legendary": "-H",
+      "notOwned": "未所持"
     }
   },
   "collection": {
@@ -145,7 +146,15 @@
     "giftsGiven": "贈ったギフト数",
     "badgesEarned": "獲得バッジ数",
     "energyTotal": "獲得Hエネルギー総量",
-    "friendCode": "マイフレンドコード"
+    "friendCode": "マイフレンドコード",
+    "changePassword": "パスワード変更",
+    "currentPassword": "現在のパスワード",
+    "newPassword": "新しいパスワード",
+    "confirmNewPassword": "新しいパスワード（確認）",
+    "passwordChanged": "パスワードを変更しました！",
+    "passwordMismatch": "パスワードが一致しません",
+    "passwordTooShort": "パスワードは6文字以上必要です",
+    "incorrectPassword": "現在のパスワードが違います"
   },
   "friends": {
     "title": "フレンド",

@@ -13,6 +13,7 @@ import { X, Layers } from "lucide-react";
 import RarityBadge from "@/components/atoms/RarityBadge";
 import type { CardRarity } from "@/models/Card";
 import { useTranslations } from "next-intl";
+import { getCardImageUrl } from "@/lib/imagekit";
 import { useGenerations } from "@/hooks/useGenerations";
 
 interface ModalCard {
@@ -171,7 +172,7 @@ export default function CardDetailModal({
                   >
                     {/* Full-bleed photo */}
                     <img
-                      src={owned === false ? "/white.png" : card.image}
+                      src={owned === false ? "/white.png" : getCardImageUrl(card.image)}
                       alt={card.name}
                       className="absolute inset-0 w-full h-full object-cover object-top z-0"
                     />
@@ -310,7 +311,7 @@ export default function CardDetailModal({
                         }}
                       >
                         <img
-                          src={owned === false ? "/white.png" : card.image}
+                          src={owned === false ? "/white.png" : getCardImageUrl(card.image)}
                           alt={card.name}
                           className="w-full h-full object-cover object-top"
                         />

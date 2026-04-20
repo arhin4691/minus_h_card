@@ -78,12 +78,25 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'No cards available to draw' }, { status: 404 });
     }
 
+    // Snapshot cards already owned BEFORE this draw to determine "new" cards
+    const existingCollection = await Collection.find({ userId }).select('cardId').lean();
+    const ownedCardIds = new Set(existingCollection.map((c) => String(c.cardId)));
+
     // Draw `count` cards
     const drawnCards = Array.from({ length: count }, () => {
       const targetRarity = pickRarity();
       const pool = fallback.filter((c) => c.rarity === targetRarity);
       const candidates = pool.length > 0 ? pool : fallback;
       return candidates[Math.floor(Math.random() * candidates.length)];
+    });
+
+    // Mark cards that were NOT in collection before this pull (first occurrence only)
+    const seenInThisDraw = new Set<string>();
+    const drawnCardsWithNew = drawnCards.map((card) => {
+      const id = String(card._id);
+      const isNew = !ownedCardIds.has(id) && !seenInThisDraw.has(id);
+      seenInThisDraw.add(id);
+      return { ...card, isNew };
     });
 
     // Deduct energy
@@ -110,15 +123,15 @@ export async function POST(request: Request) {
 
     if (count === 1) {
       return NextResponse.json({
-        card: drawnCards[0],
-        cards: drawnCards,
+        card: drawnCardsWithNew[0],
+        cards: drawnCardsWithNew,
         energySpent: totalCost,
         remainingEnergy: user.minusEnergy - totalCost,
       });
     }
 
     return NextResponse.json({
-      cards: drawnCards,
+      cards: drawnCardsWithNew,
       energySpent: totalCost,
       remainingEnergy: user.minusEnergy - totalCost,
     });
