@@ -279,7 +279,7 @@ export default function DailyExploration() {
                           className="relative overflow-hidden cursor-pointer block"
                           style={{
                             width: isSelected ? '156px' : '130px',
-                            height: isSelected ? '234px' : '195px',
+                            height: isSelected ? '275px': '230px',
                             borderRadius: '10px',
                             transformStyle: 'preserve-3d',
                             transformOrigin: 'center bottom',
@@ -327,7 +327,7 @@ export default function DailyExploration() {
                             className="absolute z-20 pointer-events-none select-none text-white/40"
                             style={{ top: '20px', right: '5px', fontSize: '8px', lineHeight: 1 }}
                           >
-                            ✂
+                            {/* ✂ */}
                           </span>
 
                           {/* ── Holographic top-left sheen ── */}
@@ -405,7 +405,7 @@ export default function DailyExploration() {
           >
             {drawMutation.isPending
               ? <><span className="animate-spin inline-block mr-2">&#10022;</span>{t('draw.drawing')}</>
-              : <>&#10024; {t('draw.button')}</>}
+              : <>&#10024; {t("gacha")}</>}
           </GlassButton>
 
           <GlassButton
@@ -417,7 +417,7 @@ export default function DailyExploration() {
           >
             {drawMutation.isPending
               ? <><span className="animate-spin inline-block mr-2">&#10022;</span>{t('draw.drawing')}</>
-              : <>&#127800; {t("gacha")} &#xD7;10 <span className="ml-1 text-xs opacity-70">(100 &#9889;)</span></>}
+              : <>{t("gacha")} &#xD7;10 <span className="ml-1 text-xs opacity-70">(100 &#9889;)</span></>}
           </GlassButton>
 
           {drawError && (

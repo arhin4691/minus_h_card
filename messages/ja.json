@@ -91,7 +91,7 @@
     "title": "デイリー探検",
     "subtitle": "Hエネルギーを見つけてレアリティをアップグレード",
     "energy": "Hエネルギー",
-    "tap": "タップして探検！",
+    "tap": "Hエネルギーを受け取る！",
     "found": "Hエネルギーを {amount} 見つけました！",
     "cooldown": "次の探検は {time} 後に可能です",
     "upgrade": "カードをアップグレード",
@@ -109,7 +109,7 @@
       "drawAnother": "もう一枚引く",
       "addedToCollection": "コレクションに追加しました！",
       "seedCards": "カードデータベースを初期化",
-      "selectGeneration": "世代",
+      "selectGeneration": "世代を選んでください",
       "allGenerations": "すべて"
     },
     "gacha": "ガチャ",

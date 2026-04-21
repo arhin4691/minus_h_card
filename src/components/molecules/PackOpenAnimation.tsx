@@ -374,7 +374,7 @@ export default function PackOpenAnimation({ cards, onClose }: PackOpenAnimationP
               </span>
             </p>
             <div
-              className="w-full overflow-y-auto"
+              className="w-full overflow-y-auto m-5 p-5"
               style={{ maxHeight: 'calc(90vh - 130px)' }}
             >
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 pb-2">

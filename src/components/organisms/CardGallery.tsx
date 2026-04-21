@@ -141,7 +141,7 @@ export default function CardGallery() {
                       <span>{gen.code}</span>
                       {activeGenerationFilter === gen.code && (
                         <span className="hidden sm:inline ml-1 opacity-75 text-[10px] font-normal">
-                          {gen.nameEn.split('—')[0].trim()}
+                          {gen.nameJa.split('—')[0].trim()}
                         </span>
                       )}
                     </GlassButton>
