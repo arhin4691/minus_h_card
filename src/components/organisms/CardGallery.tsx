@@ -18,6 +18,8 @@ const RARITIES: (CardRarity | 'all')[] = [
   'all', 'common', 'uncommon', 'rare', 'superRare', 'epic', 'legendary',
 ];
 
+const PAGE_SIZE = 15;
+
 interface CardData {
   _id: string;
   name: string;
@@ -38,6 +40,31 @@ export default function CardGallery() {
   const { data: collection } = useCollection(userId);
   const { data: generations } = useGenerations();
   const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
+
+  // Infinite scroll
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
+  // Reset pagination whenever the filtered card list changes
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE);
+  }, [cards]);
+
+  // Observe the sentinel to load next batch
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisibleCount((prev) => prev + PAGE_SIZE);
+        }
+      },
+      { threshold: 0.1 },
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  });
 
   // Shrinking sticky bar — track how far past the sticky point we've scrolled
   const barRef = useRef<HTMLDivElement>(null);
@@ -169,7 +196,7 @@ export default function CardGallery() {
             variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.04 } } }}
             className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-4 justify-items-center"
           >
-            {cards.map((card) => (
+            {cards.slice(0, visibleCount).map((card) => (
               <motion.div
                 key={card._id}
                 variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
@@ -195,6 +222,17 @@ export default function CardGallery() {
             <span className="text-4xl mt-3 block">🃏</span>
           </GlassCard>
         )}
+
+        {/* Infinite-scroll sentinel */}
+        <div ref={sentinelRef} className="flex justify-center py-6">
+          {cards && visibleCount < cards.length && (
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ repeat: Infinity, duration: 1.5, ease: 'linear' }}
+              className="w-5 h-5 border-2 border-[#fc88c6]/60 border-t-transparent rounded-full"
+            />
+          )}
+        </div>
       </div>
 
       {/* ── Card detail modal ── */}

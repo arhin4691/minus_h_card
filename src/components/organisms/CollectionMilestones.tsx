@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { useCollection } from '@/hooks/useCards';
 import { useStore } from '@/stores/useStore';
@@ -18,6 +18,8 @@ const RARITY_ORDER: Record<CardRarity, number> = {
 
 type SortKey = 'default' | 'name' | 'rarity' | 'quantity';
 
+const PAGE_SIZE = 15;
+
 interface ModalCard {
   _id: string;
   name: string;
@@ -34,6 +36,31 @@ export default function CollectionMilestones() {
   const [selectedCard, setSelectedCard] = useState<ModalCard | null>(null);
   const [sortKey, setSortKey] = useState<SortKey>('default');
   const [sortAsc, setSortAsc] = useState(true);
+
+  // Infinite scroll
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+
+  // Reset pagination whenever sort changes
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE);
+  }, [sortKey, sortAsc]);
+
+  // Observe sentinel to load next batch
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisibleCount((prev) => prev + PAGE_SIZE);
+        }
+      },
+      { threshold: 0.1 },
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  });
 
   const totalCards = collection?.reduce((sum, c) => sum + c.quantity, 0) ?? 0;
   const uniqueCards = collection?.length ?? 0;
@@ -122,7 +149,7 @@ export default function CollectionMilestones() {
             variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.04 } } }}
             className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-4 justify-items-center"
           >
-            {sorted.map((item) => (
+            {sorted.slice(0, visibleCount).map((item) => (
               <motion.div
                 key={item._id}
                 variants={{ hidden: { opacity: 0, scale: 0.9 }, visible: { opacity: 1, scale: 1 } }}
@@ -157,6 +184,17 @@ export default function CollectionMilestones() {
               </motion.div>
             ))}
           </motion.div>
+
+          {/* Infinite-scroll sentinel */}
+          <div ref={sentinelRef} className="flex justify-center py-6">
+            {visibleCount < sorted.length && (
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ repeat: Infinity, duration: 1.5, ease: 'linear' }}
+                className="w-5 h-5 border-2 border-[#fc88c6]/60 border-t-transparent rounded-full"
+              />
+            )}
+          </div>
         </LayoutGroup>
       ) : (
         <GlassCard hover={false} className="p-12 text-center">

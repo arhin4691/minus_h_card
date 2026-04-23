@@ -37,6 +37,7 @@ export default function DailyExploration() {
   // Draw generation selection — default to the newest generation on first load
   const [selectedGeneration, setSelectedGeneration] = useState<string>('all');
   const hasDefaultedGen = useRef(false);
+  const genScrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!hasDefaultedGen.current && generations && generations.length > 0) {
@@ -46,6 +47,38 @@ export default function DailyExploration() {
       setSelectedGeneration(newest.code);
       hasDefaultedGen.current = true;
     }
+  }, [generations]);
+
+  // Mobile: auto-select the generation card closest to the scroll center
+  useEffect(() => {
+    const container = genScrollRef.current;
+    if (!container || !generations || generations.length === 0) return;
+    const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+    if (!isTouchDevice) return;
+    let rafId: number;
+    function onScroll() {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        if (!container) return;
+        const containerRect = container.getBoundingClientRect();
+        const centerX = containerRect.left + containerRect.width / 2;
+        const buttons = container.querySelectorAll<HTMLButtonElement>('[data-gen-code]');
+        let closest: { dist: number; code: string } | null = null;
+        buttons.forEach((btn) => {
+          const rect = btn.getBoundingClientRect();
+          const dist = Math.abs(rect.left + rect.width / 2 - centerX);
+          if (!closest || dist < closest.dist) {
+            closest = { dist, code: btn.dataset.genCode! };
+          }
+        });
+        if (closest) setSelectedGeneration((closest as { dist: number; code: string }).code);
+      });
+    }
+    container.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      container.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(rafId);
+    };
   }, [generations]);
 
   // Explore animation state
@@ -253,7 +286,7 @@ export default function DailyExploration() {
                 {t('draw.selectGeneration')}
               </div>
               {/* Horizontal scroll — newest generation first (leftmost) */}
-              <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide -mx-2 px-2">
+              <div ref={genScrollRef} className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide -mx-2 px-2">
                 {[...generations]
                   .sort((a, b) => new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime())
                   .map((gen, idx) => {
@@ -276,6 +309,7 @@ export default function DailyExploration() {
                       >
                         <motion.button
                           onClick={() => setSelectedGeneration(gen.code)}
+                          data-gen-code={gen.code}
                           className="relative overflow-hidden cursor-pointer block"
                           style={{
                             width: isSelected ? '156px' : '130px',
