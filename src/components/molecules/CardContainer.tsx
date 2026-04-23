@@ -268,10 +268,10 @@ export default function CardContainer({
             </div>
 
             {/* Text + rarity — pinned to bottom */}
-            <div className="absolute bottom-0 left-2 right-2 z-20 rounded-b-md overflow-hidden">
+            <div className="absolute bottom-0 left-2 right-2 z-20 rounded-b-md overflow-hidden rounded-t-md">
               <div
                 className="px-2.5 py-1.5 overflow-hidden"
-                style={{ background: 'rgba(255,255,255,0.92)', height: '42px' }}
+                style={{ background: 'rgba(255,255,255,0.92)', height: '40px' }}
               >
                 <p className="text-[9.5px] text-slate-700 line-clamp-2 leading-relaxed italic">
                   {information}
@@ -279,7 +279,7 @@ export default function CardContainer({
               </div>
               <div
                 className="px-2.5 py-1.5 flex items-center justify-between border-t border-slate-200/80 mb-2 rounded-b-md"
-                style={{ background: 'rgba(255,255,255,0.85)', height: '42px' }}
+                style={{ background: 'rgba(255,255,255,0.85)', height: '30px' }}
               >
                 <RarityBadge rarity={rarity} label={t(rarity)} />
               </div>

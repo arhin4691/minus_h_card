@@ -172,7 +172,11 @@ export default function CardDetailModal({
                   >
                     {/* Full-bleed photo */}
                     <img
-                      src={owned === false ? "/white.png" : getCardImageUrl(card.image)}
+                      src={
+                        owned === false
+                          ? "/white.png"
+                          : getCardImageUrl(card.image)
+                      }
                       alt={card.name}
                       className="absolute inset-0 w-full h-full object-cover object-top z-0"
                     />
@@ -237,7 +241,14 @@ export default function CardDetailModal({
 
                     {/* Bottom gradient: info + gen details + rarity */}
                     <div className="absolute bottom-0 left-0 right-0 z-20 bg-gradient-to-t from-black/95 via-black/70 to-transparent px-5 pt-16 pb-4 space-y-2">
-                      <p className="text-sm text-white/80 leading-relaxed line-clamp-3">
+                      <p
+                        className="text-sm text-white/80 leading-relaxed"
+                        style={{
+                          minHeight: "40px",
+                          maxHeight: "40px",
+                          overflow: "auto",
+                        }}
+                      >
                         {owned === false ? "???" : card.information}
                       </p>
                       {card.generation && (
@@ -255,11 +266,18 @@ export default function CardDetailModal({
                                 &#8212; {genInfo.nameEn}
                               </span>
                             )}
-                            {genInfo?.description && (
-                              <p className="text-[11px] text-slate-400 mt-0.5 leading-snug">
+                            {/* {genInfo?.description && (
+                              <p
+                                className="text-[11px] text-slate-400 mt-0.5 leading-snug"
+                                style={{
+                                  minHeight: "10px",
+                                  maxHeight: "10px",
+                                  overflow: "auto",
+                                }}
+                              >
                                 {genInfo.description}
                               </p>
-                            )}
+                            )} */}
                           </div>
                         </div>
                       )}
@@ -307,11 +325,15 @@ export default function CardDetailModal({
                         style={{
                           boxShadow:
                             "inset 0 3px 10px rgba(0,0,0,0.6), 0 0 0 2px rgba(0,0,0,0.35)",
-                          aspectRatio: "4/3",
+                          aspectRatio: "4/4",
                         }}
                       >
                         <img
-                          src={owned === false ? "/white.png" : getCardImageUrl(card.image)}
+                          src={
+                            owned === false
+                              ? "/white.png"
+                              : getCardImageUrl(card.image)
+                          }
                           alt={card.name}
                           className="w-full h-full object-cover object-top"
                         />
@@ -332,8 +354,8 @@ export default function CardDetailModal({
                         className="px-4 py-3"
                         style={{
                           background: "rgba(255,255,255,0.93)",
-                          minHeight: "100px",
-                          maxHeight: "100px",
+                          minHeight: "60px",
+                          maxHeight: "60px",
                           overflowY: "auto",
                         }}
                       >
@@ -353,8 +375,8 @@ export default function CardDetailModal({
                           />
                           <div
                             style={{
-                              minHeight: "40px",
-                              maxHeight: "40px",
+                              minHeight: "20px",
+                              maxHeight: "20px",
                               overflow: "auto",
                             }}
                           >
