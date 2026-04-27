@@ -1,15 +1,25 @@
 'use client';
 
 import Image from 'next/image';
+import { useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { motion } from 'framer-motion';
 import { Link } from '@/i18n/navigation';
 import GlassCard from '@/components/atoms/GlassCard';
 import GlassButton from '@/components/atoms/GlassButton';
-import { Sparkles, FolderHeart } from 'lucide-react';
+import { Sparkles, FolderHeart, ArrowRight } from 'lucide-react';
+import { useGenerations } from '@/hooks/useGenerations';
 
 export default function HomePage() {
   const t = useTranslations('home');
+  const { data: generations } = useGenerations();
+
+  const sortedGenerations = useMemo(() => {
+    if (!generations) return [];
+    return [...generations].sort(
+      (a, b) => new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime(),
+    );
+  }, [generations]);
 
   return (
     <div className="space-y-12">
@@ -62,54 +72,73 @@ export default function HomePage() {
         </div>
       </motion.section>
 
-      {/* Featured Cards Section */}
+      {/* Collections Section */}
       <section>
-        <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-6 text-center">
-          {t('featuredCards')}
-        </h2>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100">
+            {t('collections')}
+          </h2>
+          <Link href="/gallery">
+            <GlassButton variant="ghost" size="sm">
+              {t('browseAll')}
+              <ArrowRight size={14} />
+            </GlassButton>
+          </Link>
+        </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 gap-6 max-w-4xl mx-auto xl:max-w-none">
-          {/* Card previews */}
-          {[
-            {
-              emoji: '🌸',
-              title: 'Sakura Spirit',
-              desc: 'A gentle card carrying the essence of spring',
-              gradient: 'from-pink-200/40 to-rose-200/40',
-            },
-            {
-              emoji: '⚡',
-              title: 'Thunder Bloom',
-              desc: 'Electric energy wrapped in floral beauty',
-              gradient: 'from-amber-200/40 to-yellow-200/40',
-            },
-            {
-              emoji: '💎',
-              title: 'Crystal Moon',
-              desc: 'A legendary card reflecting moonlit dreams',
-              gradient: 'from-blue-200/40 to-purple-200/40',
-            },
-          ].map((card) => (
-            <motion.div
-              key={card.title}
-              whileHover={{ y: -8, scale: 1.02 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            >
-              <GlassCard className="p-6">
-                <div
-                  className={`w-full aspect-[3/4] rounded-2xl bg-gradient-to-br ${card.gradient} flex items-center justify-center mb-4`}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl mx-auto xl:max-w-none">
+          {sortedGenerations.length > 0
+            ? sortedGenerations.map((gen, index) => (
+                <motion.div
+                  key={gen._id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1, duration: 0.5 }}
+                  whileHover={{ y: -8, scale: 1.02 }}
                 >
-                  <span className="text-5xl">{card.emoji}</span>
+                  <Link href="/gallery">
+                    <GlassCard hover={false} className="overflow-hidden cursor-pointer group">
+                      {/* Cover image */}
+                      <div className="relative w-full aspect-video overflow-hidden rounded-t-3xl">
+                        <Image
+                          src={`/collections/cover/${gen.code}.png`}
+                          alt={gen.nameJa}
+                          fill
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                        {index === 0 && (
+                          <span className="absolute top-3 left-3 bg-[#fc88c6] text-white text-[11px] font-bold px-2.5 py-1 rounded-full shadow-md">
+                            {t('newRelease')}
+                          </span>
+                        )}
+                        <span className="absolute top-3 right-3 bg-black/60 text-white text-xs font-bold px-2 py-1 rounded-md backdrop-blur-sm tracking-wide">
+                          {gen.code}
+                        </span>
+                      </div>
+
+                      <div className="p-4">
+                        <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100 leading-tight">
+                          {gen.nameJa}
+                        </h3>
+                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 line-clamp-2">
+                          {gen.description}
+                        </p>
+                      </div>
+                    </GlassCard>
+                  </Link>
+                </motion.div>
+              ))
+            : [...Array(2)].map((_, i) => (
+                <div key={i} className="animate-pulse">
+                  <GlassCard hover={false} className="overflow-hidden">
+                    <div className="w-full aspect-video bg-slate-200 dark:bg-slate-700 rounded-t-3xl" />
+                    <div className="p-4 space-y-2">
+                      <div className="h-5 bg-slate-200 dark:bg-slate-700 rounded w-3/4" />
+                      <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded w-full" />
+                    </div>
+                  </GlassCard>
                 </div>
-                <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100">
-                  {card.title}
-                </h3>
-                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                  {card.desc}
-                </p>
-              </GlassCard>
-            </motion.div>
-          ))}
+              ))}
         </div>
       </section>
     </div>

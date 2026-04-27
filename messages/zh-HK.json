@@ -46,7 +46,10 @@
     "subtitle": "收集、交易，解鎖宇宙中最可愛的卡牌",
     "startExploring": "立即招募人員！",
     "viewCollection": "我的收藏",
-    "featuredCards": "精選卡牌"
+    "featuredCards": "精選卡牌",
+    "collections": "系列收藏",
+    "newRelease": "最新",
+    "browseAll": "瀏覽圖鑑"
   },
   "gallery": {
     "title": "卡牌圖鑑",
@@ -85,7 +88,13 @@
       "name": "名稱",
       "rarity": "稀有度",
       "quantity": "數量"
-    }
+    },
+    "filter": {
+      "searchPlaceholder": "搜尋我的收藏",
+      "all": "全部",
+      "allGen": "全小組"
+    },
+    "noResults": "找不到符合條件的卡牌"
   },
   "explore": {
     "title": "抽卡",

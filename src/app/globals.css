@@ -29,6 +29,17 @@
   ::selection { background-color: rgba(252,136,198,0.3); color: inherit; }
 }
 
+/* ===== Scrollbar hide utility ===== */
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 /* ===== Sparkle particles ===== */
 @layer utilities {
   .sparkle-overlay {

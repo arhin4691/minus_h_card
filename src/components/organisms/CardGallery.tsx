@@ -12,7 +12,7 @@ import GlassButton from '@/components/atoms/GlassButton';
 import GlassCard from '@/components/atoms/GlassCard';
 import type { CardRarity } from '@/models/Card';
 import { Search, Filter, Layers } from 'lucide-react';
-import { motion, LayoutGroup } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 const RARITIES: (CardRarity | 'all')[] = [
   'all', 'common', 'uncommon', 'rare', 'superRare', 'epic', 'legendary',
@@ -64,7 +64,7 @@ export default function CardGallery() {
     );
     observer.observe(sentinel);
     return () => observer.disconnect();
-  });
+  }, []);
 
   // Shrinking sticky bar — track how far past the sticky point we've scrolled
   const barRef = useRef<HTMLDivElement>(null);
@@ -103,8 +103,7 @@ export default function CardGallery() {
   );
 
   return (
-    <LayoutGroup>
-      <div className="space-y-6">
+    <div className="space-y-6">
         {/* ── Filters ── */}
         <div ref={barRef} className="sticky top-25 z-50">
           <GlassCard
@@ -210,7 +209,6 @@ export default function CardGallery() {
                   image={card.image}
                   generation={card.generation || undefined}
                   owned={isLoggedIn ? ownedIds.has(card._id) : false}
-                  layoutId={`card-zoom-${card._id}`}
                   onClick={() => setSelectedCard(card as CardData)}
                 />
               </motion.div>
@@ -233,15 +231,14 @@ export default function CardGallery() {
             />
           )}
         </div>
-      </div>
 
-      {/* ── Card detail modal ── */}
-      <CardDetailModal
-        card={selectedCard}
-        owned={selectedCard ? (isLoggedIn ? ownedIds.has(selectedCard._id) : false) : false}
-        onClose={() => setSelectedCard(null)}
-      />
-    </LayoutGroup>
-  );
+        {/* ── Card detail modal ── */}
+        <CardDetailModal
+          card={selectedCard}
+          owned={selectedCard ? (isLoggedIn ? ownedIds.has(selectedCard._id) : false) : false}
+          onClose={() => setSelectedCard(null)}
+        />
+      </div>
+    );
 }
 

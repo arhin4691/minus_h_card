@@ -2,12 +2,12 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
-import Script from 'next/script';
 import ThemeProvider from '@/providers/ThemeProvider';
 import QueryProvider from '@/providers/QueryProvider';
 import SessionProvider from '@/providers/SessionProvider';
 import Layout from '@/components/templates/Layout';
 import '@/app/globals.css';
+import Script from 'next/script';
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -109,16 +109,14 @@ export default async function LocaleLayout({
     <html lang={locale} suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-      </head>
-      <body className="antialiased font-sans">
-        {/* Anti-flash: apply dark class before first paint */}
+        {/* Anti-flash: apply dark class synchronously before first paint */}
         <Script
-          id="dark-mode-init"
-          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var t=localStorage.getItem('theme');var m=window.matchMedia('(prefers-color-scheme:dark)').matches;if(t==='dark'||(t===null&&m)){document.documentElement.classList.add('dark')}}catch(e){}})()`,
           }}
         />
+      </head>
+      <body className="antialiased font-sans">
         <NextIntlClientProvider locale={locale} messages={messages}>
           <QueryProvider>
             <SessionProvider>

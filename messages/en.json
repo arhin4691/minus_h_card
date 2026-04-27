@@ -47,7 +47,10 @@
     "subtitle": "Collect, trade, and unlock the cutest cards in the universe",
     "startExploring": "Let's recruit personnel",
     "viewCollection": "My Collection",
-    "featuredCards": "Featured Cards"
+    "featuredCards": "Featured Cards",
+    "collections": "Collections",
+    "newRelease": "New",
+    "browseAll": "Browse Gallery"
   },
   "gallery": {
     "title": "Card Gallery",
@@ -86,7 +89,13 @@
       "name": "Name",
       "rarity": "Rarity",
       "quantity": "Qty"
-    }
+    },
+    "filter": {
+      "searchPlaceholder": "Search my collection",
+      "all": "All",
+      "allGen": "All Gen"
+    },
+    "noResults": "No cards match your filters"
   },
   "explore": {
     "title": "Gacha",

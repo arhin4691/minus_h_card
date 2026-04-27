@@ -153,8 +153,10 @@ export default function CardDetailModal({
               <motion.div
                 ref={cardRef}
                 key={card._id}
-                layoutId={`card-zoom-${card._id}`}
-                layout
+                initial={{ scale: 0.88, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.88, opacity: 0 }}
+                transition={{ type: 'spring', stiffness: 320, damping: 26 }}
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
                 style={{ rotateX, rotateY }}
@@ -165,10 +167,10 @@ export default function CardDetailModal({
               `}
               >
                 {FULL_ART_RARITIES.includes(card.rarity) ? (
-                  /* Full-art modal: photo fills whole card (3/4 portrait), text overlaid */
+                  /* Full-art modal: photo fills whole card, text overlaid */
                   <div
                     className="relative overflow-hidden rounded-2xl"
-                    style={{ aspectRatio: "3/4" }}
+                    style={{ paddingBottom: '140%' }}
                   >
                     {/* Full-bleed photo */}
                     <img

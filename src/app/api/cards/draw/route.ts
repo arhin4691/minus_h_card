@@ -8,16 +8,16 @@ import { logAction, countRecentActions } from '@/lib/logAction';
 
 const DRAW_COST = 10;
 /** Max draws (individual cards) per minute per user — anti-cheat rate limit */
-const MAX_DRAWS_PER_MINUTE = 30;
+const MAX_DRAWS_PER_MINUTE = 80;
 
 // Weighted rarity pool (sum = 100) — 'legendary' only via milestone
 const RARITY_WEIGHTS: { rarity: CardRarity; weight: number }[] = [
   { rarity: 'common',    weight: 40 },
   { rarity: 'uncommon',  weight: 25 },
-  { rarity: 'rare',      weight: 20 },
-  { rarity: 'superRare', weight: 10 },
-  { rarity: 'epic',      weight: 5 },
-  { rarity: 'legendary', weight: 1 },
+  { rarity: 'rare',      weight: 15 },
+  { rarity: 'superRare', weight: 12 },
+  { rarity: 'epic',      weight: 6 },
+  { rarity: 'legendary', weight: 2 },
 ];
 
 function pickRarity(): CardRarity {

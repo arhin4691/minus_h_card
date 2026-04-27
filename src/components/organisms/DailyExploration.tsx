@@ -81,6 +81,24 @@ export default function DailyExploration() {
     };
   }, [generations]);
 
+  // Scroll the selected pack into the center of the scroll container
+  useEffect(() => {
+    const container = genScrollRef.current;
+    if (!container) return;
+    const btn = container.querySelector<HTMLElement>(`[data-gen-code="${selectedGeneration}"]`);
+    if (!btn) return;
+    // Use the wrapper div (parent of button) for accurate width
+    const wrapper = btn.parentElement ?? btn;
+    const containerRect = container.getBoundingClientRect();
+    const wrapperRect = wrapper.getBoundingClientRect();
+    const scrollLeft =
+      container.scrollLeft +
+      wrapperRect.left -
+      containerRect.left -
+      (containerRect.width - wrapperRect.width) / 2;
+    container.scrollTo({ left: scrollLeft, behavior: 'smooth' });
+  }, [selectedGeneration]);
+
   // Explore animation state
   const [lastFound, setLastFound] = useState<number | null>(null);
   const [exploreKey, setExploreKey] = useState(0);
@@ -179,7 +197,7 @@ export default function DailyExploration() {
         )}
       </AnimatePresence>
 
-      <div className="max-w-lg mx-auto space-y-6">
+      <div className="w-full sm:max-w-lg sm:mx-auto space-y-6">
         {/* ── Daily Explore section ── */}
         <GlassCard hover={false} className="p-8 text-center relative overflow-visible">
           <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-1">
@@ -286,7 +304,7 @@ export default function DailyExploration() {
                 {t('draw.selectGeneration')}
               </div>
               {/* Horizontal scroll — newest generation first (leftmost) */}
-              <div ref={genScrollRef} className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide -mx-2 px-2">
+              <div ref={genScrollRef} className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide -mx-8 px-8">
                 {[...generations]
                   .sort((a, b) => new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime())
                   .map((gen, idx) => {
@@ -304,7 +322,7 @@ export default function DailyExploration() {
                       /* ── Booster-pack shaped card ── */
                       <div
                         key={gen._id}
-                        className="shrink-0 snap-start mt-5 p-5"
+                        className="shrink-0 snap-center mt-5 p-5"
                         style={{ perspective: '700px' }}
                       >
                         <motion.button

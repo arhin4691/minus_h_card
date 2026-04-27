@@ -46,7 +46,10 @@
     "subtitle": "人材カードを集めて、交換して、アンロックしよう",
     "startExploring": "人材を募集する",
     "viewCollection": "マイコレクション",
-    "featuredCards": "注目のカード"
+    "featuredCards": "注目のカード",
+    "collections": "コレクション一覧",
+    "newRelease": "新作",
+    "browseAll": "図鑑を見る"
   },
   "gallery": {
     "title": "カードギャラリー",
@@ -85,7 +88,13 @@
       "name": "名前",
       "rarity": "レアリティ",
       "quantity": "枚数"
-    }
+    },
+    "filter": {
+      "searchPlaceholder": "コレクションを検索",
+      "all": "全部",
+      "allGen": "全世代"
+    },
+    "noResults": "該当するカードがありません"
   },
   "explore": {
     "title": "デイリー探検",
