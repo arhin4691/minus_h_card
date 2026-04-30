@@ -140,7 +140,7 @@ export default function CardContainer({
         className={`relative cursor-pointer group w-full rounded-2xl overflow-hidden z-10 ${OUTER_GLOW[rarity]}`}
       >
         {fullArt ? (
-          /* Full-art: SR / SSR / -H */
+          /* Full-art: SR / SSR / HX */
           <div
             className="relative overflow-hidden"
             style={{ paddingBottom: "140%" }}

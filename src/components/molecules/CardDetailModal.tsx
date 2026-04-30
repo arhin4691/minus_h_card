@@ -29,6 +29,8 @@ interface CardDetailModalProps {
   card: ModalCard | null;
   owned?: boolean;
   onClose: () => void;
+  /** When true, renders the card directly without backdrop/portal */
+  inline?: boolean;
 }
 
 const FULL_ART_RARITIES: CardRarity[] = ["superRare", "epic", "legendary"];
@@ -62,6 +64,7 @@ export default function CardDetailModal({
   card,
   owned,
   onClose,
+  inline = false,
 }: CardDetailModalProps) {
   const t = useTranslations("gallery");
   const { data: generations } = useGenerations();

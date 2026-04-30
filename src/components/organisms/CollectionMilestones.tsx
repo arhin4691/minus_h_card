@@ -45,7 +45,7 @@ const RARITY_LABELS: Record<CardRarity, string> = {
   rare: "R",
   superRare: "SR",
   epic: "SSR",
-  legendary: "-H",
+  legendary: "HX",
 };
 
 type SortKey = "default" | "name" | "rarity" | "quantity";
