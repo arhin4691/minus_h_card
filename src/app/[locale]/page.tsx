@@ -101,7 +101,7 @@ export default function HomePage() {
                       {/* Cover image */}
                       <div className="relative w-full aspect-video overflow-hidden rounded-t-3xl">
                         <Image
-                          src={`/collections/cover/${gen.code}.png`}
+                          src={`${process.env.NEXT_PUBLIC_IMAGEKIT_URL}/collections/covers/${gen.code}.png`}
                           alt={gen.nameJa}
                           fill
                           className="object-cover transition-transform duration-500 group-hover:scale-105"
